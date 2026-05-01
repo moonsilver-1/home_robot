@@ -1,0 +1,31 @@
+<launch>
+  <arg name="gui" default="true" />
+  <arg name="model" default="waffle" />
+  <arg name="robot_name" default="turtlebot3" />
+  <arg name="x_pose" default="1.40" />
+  <arg name="y_pose" default="-1.15" />
+  <arg name="z_pose" default="0.01" />
+  <arg name="yaw" default="1.57" />
+  <arg name="spawn_robot" default="true" />
+
+  <include file="$(find aws_robomaker_small_house_world)/launch/small_house.launch">
+    <arg name="gui" value="$(arg gui)" />
+  </include>
+
+  <group if="$(arg spawn_robot)">
+    <!-- TurtleBot3 is the high-star open-source ROS1 robot we place into the house scene. -->
+    <param name="robot_description"
+           command="$(find xacro)/xacro $(find turtlebot3_description)/urdf/turtlebot3_$(arg model).urdf.xacro model:=$(arg model)" />
+
+    <node pkg="robot_state_publisher"
+          type="robot_state_publisher"
+          name="robot_state_publisher"
+          output="screen" />
+
+    <node pkg="gazebo_ros"
+          type="spawn_model"
+          name="spawn_turtlebot3"
+          output="screen"
+          args="-urdf -param robot_description -model $(arg robot_name) -x $(arg x_pose) -y $(arg y_pose) -z $(arg z_pose) -Y $(arg yaw)" />
+  </group>
+</launch>

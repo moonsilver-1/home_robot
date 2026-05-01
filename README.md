@@ -3,6 +3,10 @@
 This project is a ROS Noetic course extension for a home cleaning robot.
 It adds image preprocessing, ArUco detection, coverage scanning, person following, RGB-D target localization, and arm preset motions on top of a Patrol_Robot-style navigation stack.
 
+The current Gazebo home scene is a third-party `AWS RoboMaker Small House` world that I pulled in as a submodule for demonstration. The bundled `cleanbot_home_demo.world` is only a minimal placeholder room, not a full household map.
+
+For a high-star open-source mobile robot to place into that house scene, this repo now uses `ROBOTIS-GIT/turtlebot3` on GitHub, which is a ROS1/Gazebo-friendly platform with roughly 2k stars. It is not a literal vacuum shell, but it is the most mature open-source base we found for a household cleaning demo on Noetic.
+
 ## Environment
 
 - Ubuntu 20.04
@@ -31,11 +35,16 @@ sudo apt install -y \
   ros-noetic-actionlib \
   ros-noetic-tf \
   ros-noetic-tf2-ros \
+  ros-noetic-robot-state-publisher \
+  ros-noetic-xacro \
+  ros-noetic-gazebo-ros-pkgs \
+  ros-noetic-turtlebot3 \
+  ros-noetic-turtlebot3-gazebo \
+  ros-noetic-turtlebot3-description \
   ros-noetic-rosbash \
   ros-noetic-roslint \
   ros-noetic-rosdep \
   ros-noetic-roslaunch \
-  ros-noetic-robot-state-publisher \
   ros-noetic-joy \
   ros-noetic-teleop-twist-keyboard \
   python3-opencv \
@@ -131,6 +140,24 @@ roslaunch cleanbot_course_project cleanbot_on_patrol_robot.launch
 ```
 
 If Patrol_Robot uses different topic names, override the launch arguments instead of editing the nodes.
+
+### Home Scene
+
+To open the richer household Gazebo scene used in this repo, launch the external world package:
+
+```bash
+roslaunch aws_robomaker_small_house_world view_small_house.launch
+```
+
+That scene is the third-party house world, not a custom scene authored in this repo.
+
+To open the same house scene with TurtleBot3 already spawned inside it:
+
+```bash
+roslaunch cleanbot_course_project turtlebot3_house_demo.launch
+```
+
+By default it spawns a more visible `waffle` model in the open living-room area. If you want a different pose, override `x_pose`, `y_pose`, `z_pose`, and `yaw`.
 
 ## Topic Summary
 
@@ -267,3 +294,7 @@ The default topics assume a common simulation layout:
 - `/move_base`
 
 The actual Patrol_Robot topic names still need to be confirmed in your local copy of that project before final demo tuning.
+
+The home-like Gazebo scene currently comes from the `aws_robomaker_small_house_world` submodule, so if you want a fully custom house scene later, we should replace that with a repo-authored world instead of presenting it as original work.
+
+The robot placed into that scene is TurtleBot3 from `ROBOTIS-GIT/turtlebot3` on GitHub. The repository is around the 2k-star range and has an official `noetic` branch line plus simulation support in `turtlebot3_simulations`, which is why it is a better fit than tiny one-off vacuum repos for a Noetic classroom demo.
