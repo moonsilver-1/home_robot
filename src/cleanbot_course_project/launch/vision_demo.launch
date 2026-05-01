@@ -1,0 +1,35 @@
+<launch>
+  <arg name="rgb_topic" default="/camera/rgb/image_raw" />
+  <arg name="gray_topic" default="~gray" />
+  <arg name="blur_topic" default="~blur" />
+  <arg name="edge_topic" default="~edge" />
+  <arg name="hsv_mask_topic" default="~hsv_mask" />
+  <arg name="camera_frame" default="" />
+  <arg name="aruco_dictionary" default="DICT_4X4_50" />
+  <arg name="aruco_debug_topic" default="~debug_image" />
+  <arg name="aruco_marker_topic" default="~markers" />
+  <arg name="canny_low" default="60" />
+  <arg name="canny_high" default="150" />
+  <arg name="hsv_lower" default="[0, 80, 60]" />
+  <arg name="hsv_upper" default="[10, 255, 255]" />
+
+  <node pkg="cleanbot_course_project" type="image_preprocess_node.py" name="image_preprocess_node" output="screen">
+    <param name="input_image_topic" value="$(arg rgb_topic)" />
+    <param name="gray_topic" value="$(arg gray_topic)" />
+    <param name="blur_topic" value="$(arg blur_topic)" />
+    <param name="edge_topic" value="$(arg edge_topic)" />
+    <param name="hsv_mask_topic" value="$(arg hsv_mask_topic)" />
+    <param name="canny_low" value="$(arg canny_low)" />
+    <param name="canny_high" value="$(arg canny_high)" />
+    <param name="hsv_lower" value="$(arg hsv_lower)" />
+    <param name="hsv_upper" value="$(arg hsv_upper)" />
+  </node>
+
+  <node pkg="cleanbot_course_project" type="aruco_marker_detector.py" name="aruco_marker_detector" output="screen">
+    <param name="input_image_topic" value="$(arg rgb_topic)" />
+    <param name="debug_image_topic" value="$(arg aruco_debug_topic)" />
+    <param name="marker_topic" value="$(arg aruco_marker_topic)" />
+    <param name="aruco_dictionary" value="$(arg aruco_dictionary)" />
+    <param name="camera_frame" value="$(arg camera_frame)" />
+  </node>
+</launch>

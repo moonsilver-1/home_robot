@@ -1,0 +1,38 @@
+<launch>
+  <arg name="detection_topic" default="/yolo/detections_json" />
+  <arg name="cmd_vel_topic" default="/cmd_vel" />
+  <arg name="status_topic" default="~status" />
+  <arg name="target_class" default="person" />
+  <arg name="enable" default="false" />
+  <arg name="search_when_lost" default="false" />
+  <arg name="search_angular_speed" default="0.15" />
+  <arg name="min_confidence" default="0.35" />
+  <arg name="desired_distance" default="1.2" />
+  <arg name="max_linear_speed" default="0.18" />
+  <arg name="max_angular_speed" default="0.7" />
+  <arg name="angular_kp" default="1.4" />
+  <arg name="linear_kp" default="0.35" />
+  <arg name="lost_timeout" default="1.0" />
+  <arg name="center_tolerance_px" default="25.0" />
+  <arg name="area_distance_constant" default="18000.0" />
+
+  <node pkg="cleanbot_course_project" type="person_follow_node.py" name="person_follow_node" output="screen">
+    <rosparam file="$(find cleanbot_course_project)/config/follow_params.yaml" command="load" />
+    <param name="detection_topic" value="$(arg detection_topic)" />
+    <param name="cmd_vel_topic" value="$(arg cmd_vel_topic)" />
+    <param name="status_topic" value="$(arg status_topic)" />
+    <param name="target_class" value="$(arg target_class)" />
+    <param name="enable" value="$(arg enable)" />
+    <param name="search_when_lost" value="$(arg search_when_lost)" />
+    <param name="search_angular_speed" value="$(arg search_angular_speed)" />
+    <param name="min_confidence" value="$(arg min_confidence)" />
+    <param name="desired_distance" value="$(arg desired_distance)" />
+    <param name="max_linear_speed" value="$(arg max_linear_speed)" />
+    <param name="max_angular_speed" value="$(arg max_angular_speed)" />
+    <param name="angular_kp" value="$(arg angular_kp)" />
+    <param name="linear_kp" value="$(arg linear_kp)" />
+    <param name="lost_timeout" value="$(arg lost_timeout)" />
+    <param name="center_tolerance_px" value="$(arg center_tolerance_px)" />
+    <param name="area_distance_constant" value="$(arg area_distance_constant)" />
+  </node>
+</launch>

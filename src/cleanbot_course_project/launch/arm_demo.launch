@@ -1,0 +1,12 @@
+<launch>
+  <arg name="arm_controller_topic" default="/arm_controller/command" />
+  <arg name="command_topic" default="/cleanbot_arm/command" />
+  <arg name="presets_file" default="$(find cleanbot_course_project)/config/arm_presets.yaml" />
+
+  <node pkg="cleanbot_course_project" type="arm_preset_action_node.py" name="arm_preset_action_node" output="screen">
+    <rosparam file="$(arg presets_file)" command="load" />
+    <param name="arm_controller_topic" value="$(arg arm_controller_topic)" />
+    <param name="command_topic" value="$(arg command_topic)" />
+    <param name="presets_file" value="$(arg presets_file)" />
+  </node>
+</launch>

@@ -1,0 +1,20 @@
+camera_frame: camera_depth_optical_frame
+markers:
+  1:
+    room: dock
+    name: charging_dock
+  2:
+    room: living_room
+    name: living_room_marker
+  3:
+    room: study
+    name: study_marker
+  4:
+    room: bedroom
+    name: bedroom_marker
+  5:
+    room: kitchen
+    name: kitchen_marker
+  6:
+    room: clean_zone
+    name: cleaning_zone_marker

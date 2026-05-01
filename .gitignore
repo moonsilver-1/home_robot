@@ -1,0 +1,16 @@
+build/
+devel/
+install/
+logs/
+.catkin_tools/
+
+wsl-distro/
+wsl-image/
+
+**/__pycache__/
+*.py[cod]
+*.pyo
+
+.vscode/
+.idea/
+*.log

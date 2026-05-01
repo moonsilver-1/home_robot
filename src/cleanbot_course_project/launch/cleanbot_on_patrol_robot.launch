@@ -1,0 +1,35 @@
+<launch>
+  <arg name="rgb_topic" default="/camera/rgb/image_raw" />
+  <arg name="depth_topic" default="/camera/depth/image_raw" />
+  <arg name="camera_info_topic" default="/camera/depth/camera_info" />
+  <arg name="camera_frame" default="" />
+  <arg name="detection_topic" default="/yolo/detections_json" />
+  <arg name="cmd_vel_topic" default="/cmd_vel" />
+  <arg name="move_base_action" default="/move_base" />
+  <arg name="arm_controller_topic" default="/arm_controller/command" />
+  <arg name="command_topic" default="/cleanbot_arm/command" />
+
+  <arg name="enable_vision" default="true" />
+  <arg name="enable_coverage" default="true" />
+  <arg name="enable_person_follow" default="false" />
+  <arg name="enable_target_3d" default="true" />
+  <arg name="enable_arm" default="true" />
+
+  <include file="$(find cleanbot_course_project)/launch/demo.launch">
+    <arg name="use_vision" value="$(arg enable_vision)" />
+    <arg name="use_coverage" value="$(arg enable_coverage)" />
+    <arg name="use_person_follow" value="$(arg enable_person_follow)" />
+    <arg name="use_target_3d" value="$(arg enable_target_3d)" />
+    <arg name="use_arm" value="$(arg enable_arm)" />
+    <arg name="rgb_topic" value="$(arg rgb_topic)" />
+    <arg name="depth_topic" value="$(arg depth_topic)" />
+    <arg name="camera_info_topic" value="$(arg camera_info_topic)" />
+    <arg name="camera_frame" value="$(arg camera_frame)" />
+    <arg name="detection_topic" value="$(arg detection_topic)" />
+    <arg name="cmd_vel_topic" value="$(arg cmd_vel_topic)" />
+    <arg name="move_base_action" value="$(arg move_base_action)" />
+    <arg name="arm_controller_topic" value="$(arg arm_controller_topic)" />
+    <arg name="command_topic" value="$(arg command_topic)" />
+    <arg name="enable_person_follow" value="$(arg enable_person_follow)" />
+  </include>
+</launch>
