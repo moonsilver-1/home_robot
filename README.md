@@ -159,6 +159,8 @@ roslaunch cleanbot_course_project turtlebot3_house_demo.launch
 
 By default it spawns a more visible `waffle` model in the open living-room area. If you want a different pose, override `x_pose`, `y_pose`, `z_pose`, and `yaw`.
 
+This launch was tested in WSL Ubuntu 20.04 + ROS Noetic: TurtleBot3 spawned successfully in the house scene, and a small `/cmd_vel` forward command changed the robot pose in `/gazebo/model_states`.
+
 ## Topic Summary
 
 | Node | Input Topic | Output Topic | Type | Meaning |
