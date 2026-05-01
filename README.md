@@ -252,6 +252,20 @@ catkin_make
 bash test/smoke_noetic.sh
 ```
 
+## Quick Start
+
+If you just want to see the vacuum robot in Gazebo, use one of these shortcuts:
+
+```bash
+bash ./run_robot_vacuum_demo.sh
+```
+
+On Windows PowerShell:
+
+```powershell
+.\run_robot_vacuum_demo.ps1
+```
+
 If `rospack find cleanbot_course_project` fails, make sure you have sourced `devel/setup.bash` after building the workspace.
 
 ## Common Issues
