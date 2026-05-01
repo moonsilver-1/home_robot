@@ -1,0 +1,29 @@
+<launch>
+  <arg name="gui" default="true" />
+  <arg name="robot_name" default="robot_vacuum" />
+  <arg name="x_pose" default="1.55" />
+  <arg name="y_pose" default="-1.05" />
+  <arg name="z_pose" default="0.01" />
+  <arg name="yaw" default="1.57" />
+  <arg name="spawn_robot" default="true" />
+
+  <include file="$(find aws_robomaker_small_house_world)/launch/small_house.launch">
+    <arg name="gui" value="$(arg gui)" />
+  </include>
+
+  <group if="$(arg spawn_robot)">
+    <param name="robot_description"
+           command="$(find xacro)/xacro $(find cleanbot_course_project)/urdf/robot_vacuum.xacro" />
+
+    <node pkg="robot_state_publisher"
+          type="robot_state_publisher"
+          name="robot_state_publisher"
+          output="screen" />
+
+    <node pkg="gazebo_ros"
+          type="spawn_model"
+          name="spawn_robot_vacuum"
+          output="screen"
+          args="-urdf -param robot_description -model $(arg robot_name) -x $(arg x_pose) -y $(arg y_pose) -z $(arg z_pose) -Y $(arg yaw)" />
+  </group>
+</launch>

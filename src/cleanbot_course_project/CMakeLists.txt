@@ -31,7 +31,7 @@ catkin_install_python(PROGRAMS
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 
-install(DIRECTORY launch config worlds docs rviz
+install(DIRECTORY launch config worlds docs rviz urdf
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
   PATTERN ".git" EXCLUDE
   PATTERN "__pycache__" EXCLUDE

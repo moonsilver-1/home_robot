@@ -5,7 +5,7 @@ It adds image preprocessing, ArUco detection, coverage scanning, person followin
 
 The current Gazebo home scene is a third-party `AWS RoboMaker Small House` world that I pulled in as a submodule for demonstration. The bundled `cleanbot_home_demo.world` is only a minimal placeholder room, not a full household map.
 
-For a high-star open-source mobile robot to place into that house scene, this repo now uses `ROBOTIS-GIT/turtlebot3` on GitHub, which is a ROS1/Gazebo-friendly platform with roughly 2k stars. It is not a literal vacuum shell, but it is the most mature open-source base we found for a household cleaning demo on Noetic.
+For the robot inside that house scene, this repo now uses a vacuum-style mobile base inspired by the open-source `jun-xiangg/robot_vacuum_description` project. Unlike TurtleBot3, this model is shaped like a real扫地机器人, while still exposing differential drive, laser scan, RGB camera, and depth camera topics that fit the course modules.
 
 ## Environment
 
@@ -30,6 +30,7 @@ sudo apt install -y \
   ros-noetic-slam-gmapping \
   ros-noetic-map-server \
   ros-noetic-amcl \
+  ros-noetic-gazebo-plugins \
   ros-noetic-trajectory-msgs \
   ros-noetic-visualization-msgs \
   ros-noetic-actionlib \
@@ -38,9 +39,6 @@ sudo apt install -y \
   ros-noetic-robot-state-publisher \
   ros-noetic-xacro \
   ros-noetic-gazebo-ros-pkgs \
-  ros-noetic-turtlebot3 \
-  ros-noetic-turtlebot3-gazebo \
-  ros-noetic-turtlebot3-description \
   ros-noetic-rosbash \
   ros-noetic-roslint \
   ros-noetic-rosdep \
@@ -151,15 +149,17 @@ roslaunch aws_robomaker_small_house_world view_small_house.launch
 
 That scene is the third-party house world, not a custom scene authored in this repo.
 
-To open the same house scene with TurtleBot3 already spawned inside it:
+To open the same house scene with the vacuum-style robot already spawned inside it:
 
 ```bash
-roslaunch cleanbot_course_project turtlebot3_house_demo.launch
+roslaunch cleanbot_course_project robot_vacuum_house_demo.launch
 ```
 
-By default it spawns a more visible `waffle` model in the open living-room area. If you want a different pose, override `x_pose`, `y_pose`, `z_pose`, and `yaw`.
+For backward compatibility, `roslaunch cleanbot_course_project turtlebot3_house_demo.launch` now launches the same vacuum-style robot demo.
 
-This launch was tested in WSL Ubuntu 20.04 + ROS Noetic: TurtleBot3 spawned successfully in the house scene, and a small `/cmd_vel` forward command changed the robot pose in `/gazebo/model_states`.
+By default it spawns the vacuum robot in the open living-room area. If you want a different pose, override `x_pose`, `y_pose`, `z_pose`, and `yaw`.
+
+This launch was tested in WSL Ubuntu 20.04 + ROS Noetic with the robot spawned and movable in Gazebo. The model publishes `/cmd_vel`, `/odom`, `/scan`, `/camera/rgb/image_raw`, `/camera/depth/image_raw`, `/camera/depth/camera_info`, and `/camera/depth/points`.
 
 ## Topic Summary
 
@@ -299,4 +299,4 @@ The actual Patrol_Robot topic names still need to be confirmed in your local cop
 
 The home-like Gazebo scene currently comes from the `aws_robomaker_small_house_world` submodule, so if you want a fully custom house scene later, we should replace that with a repo-authored world instead of presenting it as original work.
 
-The robot placed into that scene is TurtleBot3 from `ROBOTIS-GIT/turtlebot3` on GitHub. The repository is around the 2k-star range and has an official `noetic` branch line plus simulation support in `turtlebot3_simulations`, which is why it is a better fit than tiny one-off vacuum repos for a Noetic classroom demo.
+The robot placed into that scene is a vacuum-style mobile base inspired by `jun-xiangg/robot_vacuum_description`. The point of switching is visual correctness: it looks like a cleaning robot instead of a general-purpose wheeled robot, while still keeping the ROS Noetic topics needed by the course exercises.
