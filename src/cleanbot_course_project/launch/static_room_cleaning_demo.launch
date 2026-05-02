@@ -23,6 +23,8 @@
       <arg name="x_pose" value="$(arg initial_pose_x)" />
       <arg name="y_pose" value="$(arg initial_pose_y)" />
       <arg name="yaw" value="$(arg initial_pose_a)" />
+      <arg name="start_navigation" value="false" />
+      <arg name="start_room_cleaning" value="false" />
     </include>
   </group>
 

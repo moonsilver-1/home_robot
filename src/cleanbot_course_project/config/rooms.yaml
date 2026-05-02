@@ -1,40 +1,40 @@
 frame_id: map
-default_step: 0.45
+default_step: 0.50
 default_yaw: 0.0
 rooms:
   living_room:
     display_name: living_room
     marker_id: 2
-    step: 0.45
+    step: 0.50
     polygon:
-      - {x: 0.85, y: 0.25}
-      - {x: 3.05, y: 0.25}
-      - {x: 3.05, y: 1.35}
-      - {x: 0.85, y: 1.35}
+      - {x: -2.3, y: -5.3}
+      - {x: 4.4, y: -5.3}
+      - {x: 4.4, y: -0.3}
+      - {x: -2.3, y: -0.3}
   kitchen:
     display_name: kitchen
     marker_id: 5
-    step: 0.25
+    step: 0.45
     polygon:
-      - {x: 0.80, y: -1.20}
-      - {x: 1.95, y: -1.20}
-      - {x: 1.95, y: -0.75}
-      - {x: 0.80, y: -0.75}
+      - {x: 5.0, y: -5.3}
+      - {x: 9.2, y: -5.3}
+      - {x: 9.2, y: 2.8}
+      - {x: 5.0, y: 2.8}
   bedroom:
     display_name: bedroom
     marker_id: 4
-    step: 0.30
+    step: 0.50
     polygon:
-      - {x: 3.85, y: 0.60}
-      - {x: 4.95, y: 0.60}
-      - {x: 4.95, y: 1.05}
-      - {x: 3.85, y: 1.05}
+      - {x: -9.2, y: -1.2}
+      - {x: -2.7, y: -1.2}
+      - {x: -2.7, y: 3.0}
+      - {x: -9.2, y: 3.0}
   study:
     display_name: study
     marker_id: 3
-    step: 0.30
+    step: 0.45
     polygon:
-      - {x: 2.35, y: -0.20}
-      - {x: 3.05, y: -0.20}
-      - {x: 3.05, y: 0.25}
-      - {x: 2.35, y: 0.25}
+      - {x: -9.2, y: -5.3}
+      - {x: -2.7, y: -5.3}
+      - {x: -2.7, y: -1.8}
+      - {x: -9.2, y: -1.8}

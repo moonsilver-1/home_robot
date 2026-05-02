@@ -1,11 +1,17 @@
 <launch>
   <arg name="gui" default="true" />
   <arg name="robot_name" default="robot_vacuum" />
-  <arg name="x_pose" default="1.55" />
-  <arg name="y_pose" default="0.55" />
+  <arg name="x_pose" default="1.00" />
+  <arg name="y_pose" default="-0.50" />
   <arg name="z_pose" default="0.0" />
   <arg name="yaw" default="0.0" />
   <arg name="spawn_robot" default="true" />
+  <arg name="start_navigation" default="true" />
+  <arg name="start_room_cleaning" default="true" />
+  <arg name="autostart_room" default="" />
+  <arg name="autostart_delay" default="3.0" />
+  <arg name="dry_run_room_cleaning" default="false" />
+  <arg name="rviz" default="true" />
 
   <include file="$(find aws_robomaker_small_house_world)/launch/small_house.launch">
     <arg name="gui" value="$(arg gui)" />
@@ -25,5 +31,42 @@
           name="spawn_robot_vacuum"
           output="screen"
           args="-urdf -param robot_description -model $(arg robot_name) -x $(arg x_pose) -y $(arg y_pose) -z $(arg z_pose) -Y $(arg yaw)" />
+  </group>
+
+  <group if="$(arg start_navigation)">
+    <node pkg="gmapping"
+          type="slam_gmapping"
+          name="slam_gmapping"
+          output="screen">
+      <rosparam file="$(find cleanbot_course_project)/config/gmapping.yaml" command="load" />
+      <remap from="scan" to="/scan" />
+    </node>
+
+    <node pkg="move_base"
+          type="move_base"
+          name="move_base"
+          output="screen">
+      <rosparam file="$(find cleanbot_course_project)/config/costmap_common.yaml" command="load" ns="global_costmap" />
+      <rosparam file="$(find cleanbot_course_project)/config/costmap_common.yaml" command="load" ns="local_costmap" />
+      <rosparam file="$(find cleanbot_course_project)/config/global_costmap.yaml" command="load" />
+      <rosparam file="$(find cleanbot_course_project)/config/local_costmap.yaml" command="load" />
+      <rosparam file="$(find cleanbot_course_project)/config/move_base.yaml" command="load" />
+    </node>
+  </group>
+
+  <group if="$(arg start_room_cleaning)">
+    <include file="$(find cleanbot_course_project)/launch/room_cleaning_demo.launch">
+      <arg name="dry_run" value="$(arg dry_run_room_cleaning)" />
+      <arg name="autostart_room" value="$(arg autostart_room)" />
+      <arg name="autostart_delay" value="$(arg autostart_delay)" />
+    </include>
+  </group>
+
+  <group if="$(arg rviz)">
+    <node pkg="rviz"
+          type="rviz"
+          name="rviz"
+          args="-d $(find cleanbot_course_project)/config/navigation.rviz"
+          output="screen" />
   </group>
 </launch>

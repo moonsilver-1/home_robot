@@ -12,7 +12,7 @@ iterations: 5
 lsigma: 0.075
 ogain: 3.0
 lskip: 0
-minimumScore: 50
+minimumScore: 30
 srr: 0.1
 srt: 0.2
 str: 0.1
@@ -22,10 +22,10 @@ angularUpdate: 0.25
 temporalUpdate: 1.0
 resampleThreshold: 0.5
 particles: 30
-xmin: -8.0
-ymin: -8.0
-xmax: 8.0
-ymax: 8.0
+xmin: -10.0
+ymin: -7.0
+xmax: 10.0
+ymax: 7.0
 delta: 0.05
 llsamplerange: 0.01
 llsamplestep: 0.01

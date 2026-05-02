@@ -25,5 +25,5 @@ local_costmap:
       inf_is_valid: true
 
   inflation_layer:
-    inflation_radius: 0.32
-    cost_scaling_factor: 6.0
+    inflation_radius: 0.55
+    cost_scaling_factor: 3.0
