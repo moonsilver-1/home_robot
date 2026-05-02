@@ -1,0 +1,47 @@
+<launch>
+  <arg name="gui" default="true" />
+  <arg name="spawn_world" default="true" />
+  <arg name="start_gmapping" default="true" />
+  <arg name="start_move_base" default="true" />
+  <arg name="start_room_cleaning" default="true" />
+  <arg name="dry_run_room_cleaning" default="false" />
+  <arg name="autostart_room" default="" />
+  <arg name="autostart_delay" default="3.0" />
+  <arg name="move_base_action" default="/move_base" />
+
+  <group if="$(arg spawn_world)">
+    <include file="$(find cleanbot_course_project)/launch/robot_vacuum_house_demo.launch">
+      <arg name="gui" value="$(arg gui)" />
+    </include>
+  </group>
+
+  <node if="$(arg start_gmapping)"
+        pkg="gmapping"
+        type="slam_gmapping"
+        name="slam_gmapping"
+        output="screen">
+    <rosparam file="$(find cleanbot_course_project)/config/gmapping.yaml" command="load" />
+    <remap from="scan" to="/scan" />
+  </node>
+
+  <node if="$(arg start_move_base)"
+        pkg="move_base"
+        type="move_base"
+        name="move_base"
+        output="screen">
+    <rosparam file="$(find cleanbot_course_project)/config/costmap_common.yaml" command="load" ns="global_costmap" />
+    <rosparam file="$(find cleanbot_course_project)/config/costmap_common.yaml" command="load" ns="local_costmap" />
+    <rosparam file="$(find cleanbot_course_project)/config/global_costmap.yaml" command="load" />
+    <rosparam file="$(find cleanbot_course_project)/config/local_costmap.yaml" command="load" />
+    <rosparam file="$(find cleanbot_course_project)/config/move_base.yaml" command="load" />
+  </node>
+
+  <group if="$(arg start_room_cleaning)">
+    <include file="$(find cleanbot_course_project)/launch/room_cleaning_demo.launch">
+      <arg name="move_base_action" value="$(arg move_base_action)" />
+      <arg name="dry_run" value="$(arg dry_run_room_cleaning)" />
+      <arg name="autostart_room" value="$(arg autostart_room)" />
+      <arg name="autostart_delay" value="$(arg autostart_delay)" />
+    </include>
+  </group>
+</launch>

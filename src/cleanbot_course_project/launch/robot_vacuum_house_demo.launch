@@ -2,9 +2,9 @@
   <arg name="gui" default="true" />
   <arg name="robot_name" default="robot_vacuum" />
   <arg name="x_pose" default="1.55" />
-  <arg name="y_pose" default="-1.05" />
-  <arg name="z_pose" default="0.01" />
-  <arg name="yaw" default="1.57" />
+  <arg name="y_pose" default="0.55" />
+  <arg name="z_pose" default="0.0" />
+  <arg name="yaw" default="0.0" />
   <arg name="spawn_robot" default="true" />
 
   <include file="$(find aws_robomaker_small_house_world)/launch/small_house.launch">

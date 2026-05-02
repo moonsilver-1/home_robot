@@ -3,6 +3,7 @@
   <arg name="use_coverage" default="false" />
   <arg name="use_person_follow" default="false" />
   <arg name="use_target_3d" default="false" />
+  <arg name="use_room_cleaning" default="false" />
   <arg name="use_arm" default="false" />
 
   <arg name="rgb_topic" default="/camera/rgb/image_raw" />
@@ -18,6 +19,7 @@
   <arg name="enable_person_follow" default="false" />
   <arg name="search_when_lost" default="false" />
   <arg name="dry_run_coverage" default="false" />
+  <arg name="dry_run_room_cleaning" default="false" />
 
   <group if="$(arg use_vision)">
     <include file="$(find cleanbot_course_project)/launch/vision_demo.launch">
@@ -48,6 +50,13 @@
       <arg name="depth_topic" value="$(arg depth_topic)" />
       <arg name="camera_info_topic" value="$(arg camera_info_topic)" />
       <arg name="camera_frame" value="$(arg camera_frame)" />
+    </include>
+  </group>
+
+  <group if="$(arg use_room_cleaning)">
+    <include file="$(find cleanbot_course_project)/launch/room_cleaning_demo.launch">
+      <arg name="move_base_action" value="$(arg move_base_action)" />
+      <arg name="dry_run" value="$(arg dry_run_room_cleaning)" />
     </include>
   </group>
 

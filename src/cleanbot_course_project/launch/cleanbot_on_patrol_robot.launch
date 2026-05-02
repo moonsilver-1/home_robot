@@ -13,6 +13,7 @@
   <arg name="enable_coverage" default="true" />
   <arg name="enable_person_follow" default="false" />
   <arg name="enable_target_3d" default="true" />
+  <arg name="enable_room_cleaning" default="true" />
   <arg name="enable_arm" default="true" />
 
   <include file="$(find cleanbot_course_project)/launch/demo.launch">
@@ -20,6 +21,7 @@
     <arg name="use_coverage" value="$(arg enable_coverage)" />
     <arg name="use_person_follow" value="$(arg enable_person_follow)" />
     <arg name="use_target_3d" value="$(arg enable_target_3d)" />
+    <arg name="use_room_cleaning" value="$(arg enable_room_cleaning)" />
     <arg name="use_arm" value="$(arg enable_arm)" />
     <arg name="rgb_topic" value="$(arg rgb_topic)" />
     <arg name="depth_topic" value="$(arg depth_topic)" />

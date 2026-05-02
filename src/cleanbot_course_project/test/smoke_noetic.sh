@@ -76,6 +76,12 @@ import yaml
 root = pathlib.Path(os.environ["PACKAGE_DIR"])
 files = [
     root / "config" / "scan_goals.yaml",
+    root / "config" / "rooms.yaml",
+    root / "config" / "gmapping.yaml",
+    root / "config" / "move_base.yaml",
+    root / "config" / "costmap_common.yaml",
+    root / "config" / "global_costmap.yaml",
+    root / "config" / "local_costmap.yaml",
     root / "config" / "follow_params.yaml",
     root / "config" / "arm_presets.yaml",
     root / "config" / "room_markers.yaml",

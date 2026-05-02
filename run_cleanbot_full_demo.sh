@@ -17,4 +17,8 @@ else
   exit 1
 fi
 
-roslaunch cleanbot_course_project robot_vacuum_house_demo.launch "$@"
+if [ "$#" -eq 0 ]; then
+  set -- gui:=true
+fi
+
+roslaunch cleanbot_course_project static_room_cleaning_demo.launch "$@"

@@ -1,316 +1,231 @@
 # cleanbot_course_project
 
-This project is a ROS Noetic course extension for a home cleaning robot.
-It adds image preprocessing, ArUco detection, coverage scanning, person following, RGB-D target localization, and arm preset motions on top of a Patrol_Robot-style navigation stack.
+这是一个 ROS Noetic 扫地机器人课程项目。当前主流程是：
 
-The current Gazebo home scene is a third-party `AWS RoboMaker Small House` world that I pulled in as a submodule for demonstration. The bundled `cleanbot_home_demo.world` is only a minimal placeholder room, not a full household map.
+1. 启动 Gazebo 小家场景和扫地机器人。
+2. 启动静态地图、AMCL 定位、`move_base` 代价地图导航。
+3. 启动房间清扫节点。
+4. 你发送房间名，机器人按该房间的覆盖路径去清扫。
 
-For the robot inside that house scene, this repo now uses a vacuum-style mobile base inspired by the open-source `jun-xiangg/robot_vacuum_description` project. Unlike TurtleBot3, this model is shaped like a real扫地机器人, while still exposing differential drive, laser scan, RGB camera, and depth camera topics that fit the course modules.
+当前可用房间名：
 
-## Environment
+- `living_room`：客厅
+- `kitchen`：厨房
+- `bedroom`：卧室
+- `study`：书房
+- `all`：按配置顺序清扫所有房间
 
-- Ubuntu 20.04
-- ROS Noetic
-- Python 3
-- Gazebo Classic
-- RViz
-- `catkin_make`
+## 最推荐的用法
 
-## Dependencies
+在 Windows PowerShell 里进入项目目录：
 
-Install the main ROS and system packages:
+```powershell
+cd D:\coding\inkwork-term2\cleanbot_course_project_noetic\cleanbot_course_project
+```
+
+第一次使用或改过代码后，先编译：
+
+```powershell
+wsl -d Ubuntu-20.04-Mirror -- bash -lc 'cd /mnt/d/coding/inkwork-term2/cleanbot_course_project_noetic/cleanbot_course_project && source /opt/ros/noetic/setup.bash && catkin_make'
+```
+
+启动完整系统：
+
+```powershell
+.\run_cleanbot_full_demo.ps1
+```
+
+等待 Gazebo 小家和机器人都出来后，另开一个 PowerShell 窗口，发送清扫指令：
+
+```powershell
+.\run_clean_room.ps1 living_room
+```
+
+换房间只改最后一个参数：
+
+```powershell
+.\run_clean_room.ps1 kitchen
+.\run_clean_room.ps1 bedroom
+.\run_clean_room.ps1 study
+.\run_clean_room.ps1 all
+```
+
+注意：`run_clean_room.ps1` 只负责“发房间指令”，不会自动启动 Gazebo 和导航系统。必须先运行 `run_cleanbot_full_demo.ps1`。
+
+## 一条命令自动启动并清扫
+
+如果你想省事，可以让它启动后自动清扫一个房间：
+
+```powershell
+.\run_cleanbot_auto_clean.ps1 living_room
+```
+
+其他房间：
+
+```powershell
+.\run_cleanbot_auto_clean.ps1 kitchen
+.\run_cleanbot_auto_clean.ps1 bedroom
+.\run_cleanbot_auto_clean.ps1 study
+.\run_cleanbot_auto_clean.ps1 all
+```
+
+## WSL 里怎么用
+
+如果你已经进入了 Ubuntu WSL 终端，就不要再输入 `wsl -d ...`。`wsl` 是 Windows PowerShell 里的命令，不是 Ubuntu 里的命令。
+
+WSL 终端里这样启动：
+
+```bash
+cd /mnt/d/coding/inkwork-term2/cleanbot_course_project_noetic/cleanbot_course_project
+bash ./run_cleanbot_full_demo.sh
+```
+
+另开一个 WSL 终端发房间指令：
+
+```bash
+cd /mnt/d/coding/inkwork-term2/cleanbot_course_project_noetic/cleanbot_course_project
+bash ./run_clean_room.sh living_room
+```
+
+自动启动并清扫：
+
+```bash
+cd /mnt/d/coding/inkwork-term2/cleanbot_course_project_noetic/cleanbot_course_project
+bash ./run_cleanbot_auto_clean.sh living_room
+```
+
+## 当前导航方案
+
+默认启动脚本现在使用：
+
+```bash
+roslaunch cleanbot_course_project static_room_cleaning_demo.launch gui:=true
+```
+
+这个 launch 会启动：
+
+- AWS RoboMaker Small House 小家世界
+- 扫地机器人 URDF 模型
+- `map_server` 静态地图
+- `amcl` 定位
+- `move_base` 全局/局部代价地图
+- `room_coverage_cleaner.py` 房间覆盖清扫节点
+
+清扫节点会优先把房间路径点交给 `move_base`。如果 `move_base` 在仿真里因为代价地图恢复行为卡住，节点会自动切到 `/odom + /cmd_vel` 的兜底点到点控制，保证机器人继续执行清扫动作，而不是只发布一个字符串后原地不动。
+
+## 我这边已经跑过的测试
+
+编译通过：
+
+```bash
+catkin_make
+```
+
+客厅 headless 验收脚本通过，测试命令：
+
+```bash
+bash ./test_room_cleaning_headless.sh living_room 75 false
+```
+
+关键日志结果：
+
+```text
+planned:living_room:4
+goal_sent:living_room_row_00_0
+goal_reached:living_room_row_00_0
+goal_sent:living_room_row_00_1
+fallback_cmd_vel:living_room_row_00_1
+goal_reached:living_room_row_00_1
+goal_sent:living_room_row_01_0
+goal_reached:living_room_row_01_0
+goal_sent:living_room_row_01_1
+goal_reached:living_room_row_01_1
+finished:living_room
+```
+
+测试时机器人里程计从大约 `(1.55, 0.55)` 移动到客厅内部路径点附近，说明不是只发命令，机器人确实在移动清扫。
+
+你也可以自己跑同一个测试：
+
+```powershell
+wsl -d Ubuntu-20.04-Mirror -- bash -lc 'cd /mnt/d/coding/inkwork-term2/cleanbot_course_project_noetic/cleanbot_course_project && source /opt/ros/noetic/setup.bash && source devel/setup.bash && bash ./test_room_cleaning_headless.sh living_room 75 false'
+```
+
+## 依赖安装
+
+如果缺依赖，在 WSL Ubuntu 里安装：
 
 ```bash
 sudo apt update
 sudo apt install -y \
   ros-noetic-desktop-full \
-  ros-noetic-cv-bridge \
-  ros-noetic-image-transport \
   ros-noetic-move-base \
-  ros-noetic-slam-gmapping \
   ros-noetic-map-server \
   ros-noetic-amcl \
+  ros-noetic-slam-gmapping \
+  ros-noetic-dwa-local-planner \
+  ros-noetic-navfn \
+  ros-noetic-costmap-2d \
+  ros-noetic-gazebo-ros-pkgs \
   ros-noetic-gazebo-plugins \
-  ros-noetic-trajectory-msgs \
-  ros-noetic-visualization-msgs \
-  ros-noetic-actionlib \
-  ros-noetic-tf \
-  ros-noetic-tf2-ros \
   ros-noetic-robot-state-publisher \
   ros-noetic-xacro \
-  ros-noetic-gazebo-ros-pkgs \
-  ros-noetic-rosbash \
-  ros-noetic-roslint \
-  ros-noetic-rosdep \
-  ros-noetic-roslaunch \
-  ros-noetic-joy \
-  ros-noetic-teleop-twist-keyboard \
+  ros-noetic-cv-bridge \
+  ros-noetic-image-transport \
+  ros-noetic-tf \
+  ros-noetic-tf2-ros \
   python3-opencv \
   python3-yaml \
   python3-numpy
 ```
 
-Optional, if you want the standalone ArUco ROS package in addition to the OpenCV-based node:
+## 常见问题
+
+### 在 WSL 里输入 `wsl -d ...` 提示 command not found
+
+这是正常的。`wsl -d Ubuntu-20.04-Mirror -- ...` 要在 Windows PowerShell 里运行。
+
+如果你已经在 Ubuntu WSL 里，就直接运行：
 
 ```bash
-sudo apt install -y ros-noetic-aruco-ros
+cd /mnt/d/coding/inkwork-term2/cleanbot_course_project_noetic/cleanbot_course_project
+bash ./run_cleanbot_full_demo.sh
 ```
 
-## Workspace Setup
+### 只看到 `publishing and latching message for 3.0 seconds`
 
-```bash
-mkdir -p ~/cleanbot_ws/src
-cd ~/cleanbot_ws/src
-git clone <this-repo-url> cleanbot_course_project
-cd ~/cleanbot_ws
-catkin_make
-source devel/setup.bash
-```
+这只说明房间命令发出去了，不代表完整系统已经启动。
 
-If you are using WSL, open the Ubuntu WSL shell first, then run the commands above inside Linux.
-
-## Launch Files
-
-### Vision
-
-Starts image preprocessing and ArUco detection.
-
-```bash
-roslaunch cleanbot_course_project vision_demo.launch
-```
-
-Useful preview tools:
-
-```bash
-rqt_image_view /image_preprocess_node/gray
-rqt_image_view /image_preprocess_node/edge
-rqt_image_view /aruco_marker_detector/debug_image
-```
-
-### Coverage
-
-Runs the move_base-based scan task manager.
-
-```bash
-roslaunch cleanbot_course_project coverage_demo.launch
-```
-
-### Person Following
-
-Starts the detection-to-velocity controller.
-The node is safe by default because `enable` defaults to `false`.
-
-```bash
-roslaunch cleanbot_course_project person_follow_demo.launch enable:=true
-```
-
-### RGB-D Localization
-
-Converts a detected target into a 3D point and a RViz marker.
-
-```bash
-roslaunch cleanbot_course_project target_3d_demo.launch
-```
-
-### Arm Presets
-
-Publishes preset joint trajectories for a demo arm controller.
-
-```bash
-roslaunch cleanbot_course_project arm_demo.launch
-```
-
-### Unified Demo
-
-Starts the modular demo with launch arguments.
-
-```bash
-roslaunch cleanbot_course_project demo.launch
-roslaunch cleanbot_course_project full_demo.launch
-```
-
-### Patrol_Robot Integration
-
-Launch the cleanbot modules with common Patrol_Robot-style topics:
-
-```bash
-roslaunch cleanbot_course_project cleanbot_on_patrol_robot.launch
-```
-
-If Patrol_Robot uses different topic names, override the launch arguments instead of editing the nodes.
-
-### Home Scene
-
-To open the richer household Gazebo scene used in this repo, launch the external world package:
-
-```bash
-roslaunch aws_robomaker_small_house_world view_small_house.launch
-```
-
-That scene is the third-party house world, not a custom scene authored in this repo.
-
-To open the same house scene with the vacuum-style robot already spawned inside it:
-
-```bash
-roslaunch cleanbot_course_project robot_vacuum_house_demo.launch
-```
-
-For backward compatibility, `roslaunch cleanbot_course_project turtlebot3_house_demo.launch` now launches the same vacuum-style robot demo.
-
-By default it spawns the vacuum robot in the open living-room area. If you want a different pose, override `x_pose`, `y_pose`, `z_pose`, and `yaw`.
-
-This launch was tested in WSL Ubuntu 20.04 + ROS Noetic with the robot spawned and movable in Gazebo. The model publishes `/cmd_vel`, `/odom`, `/scan`, `/camera/rgb/image_raw`, `/camera/depth/image_raw`, `/camera/depth/camera_info`, and `/camera/depth/points`.
-
-## Topic Summary
-
-| Node | Input Topic | Output Topic | Type | Meaning |
-| --- | --- | --- | --- | --- |
-| `image_preprocess_node.py` | `/camera/rgb/image_raw` | `gray`, `blur`, `edge`, `hsv_mask` | `sensor_msgs/Image` | RGB preprocessing outputs for debugging and downstream CV |
-| `aruco_marker_detector.py` | `/camera/rgb/image_raw` | `debug_image`, `markers` | `sensor_msgs/Image`, `std_msgs/String` | ArUco debug image and JSON marker report |
-| `coverage_task_manager.py` | `move_base_action`, `scan_goals_file` | `status`, `scan_path`, `scan_markers` | `std_msgs/String`, `nav_msgs/Path`, `visualization_msgs/MarkerArray` | Coverage scan task status and RViz path markers |
-| `person_follow_node.py` | `detection_topic` | `cmd_vel`, `status` | `std_msgs/String`, `geometry_msgs/Twist` | Safe person-follow controller using detection JSON |
-| `target_3d_locator.py` | `detection_topic`, `depth_topic`, `camera_info_topic` | `target_point`, `target_marker` | `geometry_msgs/PointStamped`, `visualization_msgs/Marker` | RGB-D 3D localization of the selected target |
-| `arm_preset_action_node.py` | `command_topic` | `arm_controller_topic` | `std_msgs/String`, `trajectory_msgs/JointTrajectory` | Demo arm preset publisher |
-
-## Parameter Summary
-
-### Image Preprocess
-
-- `input_image_topic`
-- `gray_topic`
-- `blur_topic`
-- `edge_topic`
-- `hsv_mask_topic`
-- `canny_low`
-- `canny_high`
-- `hsv_lower`
-- `hsv_upper`
-
-### ArUco Detector
-
-- `input_image_topic`
-- `debug_image_topic`
-- `marker_topic`
-- `aruco_dictionary`
-- `camera_frame`
-
-### Coverage Manager
-
-- `move_base_action`
-- `scan_goals_file`
-- `goal_timeout`
-- `retry_count`
-- `frame_id`
-- `status_topic`
-- `path_marker_topic`
-- `dry_run`
-
-### Person Follow
-
-- `detection_topic`
-- `cmd_vel_topic`
-- `target_class`
-- `enable`
-- `min_confidence`
-- `desired_distance`
-- `max_linear_speed`
-- `max_angular_speed`
-- `angular_kp`
-- `linear_kp`
-- `lost_timeout`
-- `search_when_lost`
-
-### RGB-D Locator
-
-- `detection_topic`
-- `depth_topic`
-- `camera_info_topic`
-- `target_class`
-- `point_topic`
-- `marker_topic`
-- `depth_window_size`
-- `camera_frame`
-- `depth_scale`
-
-### Arm Presets
-
-- `arm_controller_topic`
-- `presets_file`
-- `command_topic`
-
-## Config Files
-
-- `config/scan_goals.yaml`: scan point list for coverage navigation
-- `config/follow_params.yaml`: safe person-follow defaults
-- `config/room_markers.yaml`: ArUco marker to room semantic mapping
-- `config/arm_presets.yaml`: joint names and preset trajectories
-
-## Build and Test
-
-```bash
-catkin_make
-bash test/smoke_noetic.sh
-```
-
-## Quick Start
-
-If you just want to see the vacuum robot in Gazebo, use one of these shortcuts:
-
-```bash
-bash ./run_robot_vacuum_demo.sh
-```
-
-On Windows PowerShell:
+先确认另一个窗口里已经跑着：
 
 ```powershell
-.\run_robot_vacuum_demo.ps1
+.\run_cleanbot_full_demo.ps1
 ```
 
-If `rospack find cleanbot_course_project` fails, make sure you have sourced `devel/setup.bash` after building the workspace.
+然后再发：
 
-## Common Issues
+```powershell
+.\run_clean_room.ps1 living_room
+```
 
-### `cv_bridge` or OpenCV import error
+### 机器人不动或很快进入恢复旋转
 
-Install the system OpenCV and bridge packages:
+现在默认起点已经放在客厅较开阔的位置，并且清扫节点带有 `/cmd_vel` 兜底控制。如果仍然不动，先跑：
 
 ```bash
-sudo apt install -y ros-noetic-cv-bridge python3-opencv python3-numpy
+bash ./test_room_cleaning_headless.sh living_room 75 false
 ```
 
-### ArUco API mismatch
+看输出里有没有 `goal_reached` 和 `finished:living_room`。
 
-The detector node handles both older `DetectorParameters_create()` and newer `ArucoDetector` APIs. If `cv2.aruco` is missing completely, install `python3-opencv` from Ubuntu or rebuild OpenCV with contrib modules.
+## 主要文件
 
-### `move_base` action unavailable
-
-Start the navigation stack first and check that the action server matches `move_base_action`, usually `/move_base`.
-
-### Depth image missing
-
-Make sure the depth camera publishes both `depth_topic` and `camera_info_topic`.
-
-### Arm controller topic mismatch
-
-Set `arm_controller_topic` and `command_topic` from launch arguments instead of editing the node code.
-
-## Notes for Patrol_Robot
-
-This repository is designed to adapt through launch arguments and remaps.
-The default topics assume a common simulation layout:
-
-- `/camera/rgb/image_raw`
-- `/camera/depth/image_raw`
-- `/camera/depth/camera_info`
-- `/camera/depth/points`
-- `/scan`
-- `/map`
-- `/odom`
-- `/cmd_vel`
-- `/move_base`
-
-The actual Patrol_Robot topic names still need to be confirmed in your local copy of that project before final demo tuning.
-
-The home-like Gazebo scene currently comes from the `aws_robomaker_small_house_world` submodule, so if you want a fully custom house scene later, we should replace that with a repo-authored world instead of presenting it as original work.
-
-The robot placed into that scene is a vacuum-style mobile base inspired by `jun-xiangg/robot_vacuum_description`. The point of switching is visual correctness: it looks like a cleaning robot instead of a general-purpose wheeled robot, while still keeping the ROS Noetic topics needed by the course exercises.
+- `run_cleanbot_full_demo.ps1` / `run_cleanbot_full_demo.sh`：启动完整系统
+- `run_clean_room.ps1` / `run_clean_room.sh`：发送房间清扫指令
+- `run_cleanbot_auto_clean.ps1` / `run_cleanbot_auto_clean.sh`：启动后自动清扫指定房间
+- `test_room_cleaning_headless.sh`：无界面验收测试脚本
+- `src/cleanbot_course_project/launch/static_room_cleaning_demo.launch`：默认完整导航清扫 launch
+- `src/cleanbot_course_project/config/rooms.yaml`：房间范围和覆盖路径配置
+- `src/cleanbot_course_project/scripts/room_coverage_cleaner.py`：房间清扫逻辑
+- `src/cleanbot_course_project/config/move_base.yaml`：导航参数
+- `src/cleanbot_course_project/config/amcl.yaml`：定位参数

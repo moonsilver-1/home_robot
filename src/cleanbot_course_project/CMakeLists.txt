@@ -25,6 +25,7 @@ catkin_install_python(PROGRAMS
   scripts/image_preprocess_node.py
   scripts/aruco_marker_detector.py
   scripts/coverage_task_manager.py
+  scripts/room_coverage_cleaner.py
   scripts/person_follow_node.py
   scripts/target_3d_locator.py
   scripts/arm_preset_action_node.py

@@ -2,6 +2,10 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+ROOM="${1:-living_room}"
+if [ "$#" -gt 0 ]; then
+  shift
+fi
 
 source_ros_env() {
   set +u
@@ -17,4 +21,8 @@ else
   exit 1
 fi
 
-roslaunch cleanbot_course_project robot_vacuum_house_demo.launch "$@"
+roslaunch cleanbot_course_project static_room_cleaning_demo.launch \
+  gui:=true \
+  autostart_room:="${ROOM}" \
+  autostart_delay:=15.0 \
+  "$@"

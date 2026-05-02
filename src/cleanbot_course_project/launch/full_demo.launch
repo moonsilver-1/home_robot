@@ -4,6 +4,7 @@
     <arg name="use_coverage" value="true" />
     <arg name="use_person_follow" value="true" />
     <arg name="use_target_3d" value="true" />
+    <arg name="use_room_cleaning" value="true" />
     <arg name="use_arm" value="true" />
     <arg name="enable_person_follow" value="false" />
   </include>
