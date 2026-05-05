@@ -1,0 +1,31 @@
+<launch>
+  <!-- 根据实际 rostopic list 结果修改这个图像话题 -->
+  <arg name="image_topic" default="/camera/rgb/image_raw" />
+
+  <!-- 样本保存目录 -->
+  <arg name="output_dir" default="$(env HOME)/home_robot/datasets/target_samples" />
+
+  <!-- 当前采集类别，例如 target / background / person / marker -->
+  <arg name="label" default="target" />
+
+  <!-- 是否自动保存 -->
+  <arg name="auto_save" default="false" />
+
+  <!-- 自动保存间隔，单位秒 -->
+  <arg name="save_interval" default="1.0" />
+
+  <!-- 若为 0 则不缩放；可设为 640 -->
+  <arg name="resize_width" default="0" />
+
+  <node pkg="cleanbot_course_project"
+        type="image_sample_collector.py"
+        name="image_sample_collector"
+        output="screen">
+    <param name="image_topic" value="$(arg image_topic)" />
+    <param name="output_dir" value="$(arg output_dir)" />
+    <param name="label" value="$(arg label)" />
+    <param name="auto_save" value="$(arg auto_save)" />
+    <param name="save_interval" value="$(arg save_interval)" />
+    <param name="resize_width" value="$(arg resize_width)" />
+  </node>
+</launch>

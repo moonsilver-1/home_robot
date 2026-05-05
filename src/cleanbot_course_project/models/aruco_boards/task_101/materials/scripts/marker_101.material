@@ -1,0 +1,13 @@
+material CleanBot/Marker101
+{
+  technique
+  {
+    pass
+    {
+      texture_unit
+      {
+        texture marker_101.png
+      }
+    }
+  }
+}

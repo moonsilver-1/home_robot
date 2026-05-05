@@ -1,0 +1,44 @@
+tasks:
+  101:
+    task_name: "find_blue_ball"
+    display_name: "寻找蓝色球"
+    target_object: "blue_ball"
+    target_marker_id: 201
+    room_id: "living_room"
+    room_goal:
+      x: -1.2
+      y: 0.6
+      yaw: 0.0
+  102:
+    task_name: "find_trash_bin"
+    display_name: "寻找垃圾桶"
+    target_object: "trash_bin"
+    target_marker_id: 202
+    room_id: "kitchen"
+    room_goal:
+      x: 1.4
+      y: 0.8
+      yaw: 1.57
+  103:
+    task_name: "find_chair"
+    display_name: "寻找椅子"
+    target_object: "chair"
+    target_marker_id: 203
+    room_id: "study"
+    room_goal:
+      x: -2.0
+      y: 1.8
+      yaw: 0.0
+  104:
+    task_name: "find_picture"
+    display_name: "寻找墙上图片"
+    target_object: "picture"
+    target_marker_id: 204
+    room_id: "bedroom"
+    room_goal:
+      x: 1.5
+      y: -1.2
+      yaw: -1.57
+
+task_board_ids: [101, 102, 103, 104]
+target_marker_ids: [201, 202, 203, 204]

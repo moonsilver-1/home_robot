@@ -1,4 +1,0 @@
-<launch>
-  <!-- Backward-compatible alias: this now launches the vacuum-style robot demo. -->
-  <include file="$(find cleanbot_course_project)/launch/robot_vacuum_house_demo.launch" />
-</launch>

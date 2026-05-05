@@ -1,42 +1,28 @@
-# Implementation Notes
+# 目前已经完成
 
-## Included Nodes
+## 识别物体：
+ 包括识别蓝色球和椅子
 
-1. `image_preprocess_node.py`
-   - Subscribes to RGB images.
-   - Publishes gray, blur, edge, and HSV mask images.
-   - Useful for `rqt_image_view` and quick camera debugging.
+1. 启动gazebo
+```
+  roslaunch cleanbot_course_project tb3_waffle_pi_house.launch
+```
 
-2. `aruco_marker_detector.py`
-   - Subscribes to RGB images.
-   - Publishes a debug image and a JSON marker report.
-   - Uses the OpenCV ArUco API and supports newer and older OpenCV 4 variants.
 
-3. `coverage_task_manager.py`
-   - Reads scan goals from YAML.
-   - Sends `move_base` action goals in sequence.
-   - Publishes a `nav_msgs/Path` and RViz markers.
+2. 打开目标识别
+```
+   roslaunch cleanbot_course_project object_recognition.launch 
+```
 
-4. `person_follow_node.py`
-   - Consumes JSON detections.
-   - Produces a conservative `cmd_vel` command.
-   - Disabled by default for safety.
 
-5. `target_3d_locator.py`
-   - Consumes JSON detections, depth images, and camera info.
-   - Publishes `geometry_msgs/PointStamped` and an RViz marker.
+3. 键盘操控
 
-6. `arm_preset_action_node.py`
-   - Reads arm presets from YAML.
-   - Publishes `trajectory_msgs/JointTrajectory` to the arm controller topic.
+```
+   roslaunch turtlebot3_teleop turtlebot3_teleop_key.launch
+```
 
-## Patrol_Robot Integration
+## 双车跟随
 
-The project is intended to be launched alongside Patrol_Robot through remaps and launch arguments.
-The default topics assume a common simulation layout, but the actual Patrol_Robot topic names still need to be confirmed in your local copy of that repository.
-
-## Safety Notes
-
-- Person following is disabled by default.
-- Coverage uses `move_base` action goals, not a direct velocity stream.
-- Arm control only publishes preset trajectories, not full manipulation or visual servoing.
+```
+roslaunch cleanbot_course_project leader_follower_demo.launch
+```

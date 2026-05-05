@@ -1,0 +1,17 @@
+image_topic: "/camera/rgb/image_raw"
+camera_info_topic: "/camera/rgb/camera_info"
+
+aruco_dictionary: "DICT_4X4_250"
+
+marker_length: 0.12
+
+publish_debug_image: true
+debug_image_topic: "/cleanbot/aruco/debug_image"
+detections_topic: "/cleanbot/aruco/detections"
+task_topic: "/cleanbot/task/current_task"
+task_state_topic: "/cleanbot/task/state"
+
+search_angular_speed: 0.25
+search_timeout: 25.0
+task_read_timeout: 20.0
+target_confirm_frames: 5

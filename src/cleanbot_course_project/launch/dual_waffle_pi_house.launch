@@ -1,0 +1,65 @@
+<launch>
+  <!-- Gazebo world -->
+  <arg name="world_name"
+       default="$(find aws_robomaker_small_house_world)/worlds/small_house.world" />
+
+  <!-- Spawn poses -->
+  <arg name="leader_x" default="-1.5" />
+  <arg name="leader_y" default="0.5" />
+  <arg name="leader_z" default="0.08" />
+  <arg name="leader_yaw" default="0.0" />
+
+  <arg name="follower_x" default="-2.3" />
+  <arg name="follower_y" default="0.5" />
+  <arg name="follower_z" default="0.08" />
+  <arg name="follower_yaw" default="0.0" />
+
+  <!-- Make sure Gazebo can find AWS house models -->
+  <env name="GAZEBO_MODEL_PATH"
+       value="$(find aws_robomaker_small_house_world)/models:$(optenv GAZEBO_MODEL_PATH)" />
+
+  <!-- Start Gazebo -->
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="world_name" value="$(arg world_name)" />
+    <arg name="paused" value="false" />
+    <arg name="use_sim_time" value="true" />
+    <arg name="gui" value="true" />
+    <arg name="headless" value="false" />
+    <arg name="debug" value="false" />
+    <arg name="verbose" value="true" />
+  </include>
+
+  <!-- Load Waffle Pi URDF -->
+  <param name="robot_description"
+         command="$(find xacro)/xacro --inorder $(find cleanbot_course_project)/urdf/cleanbot_waffle_pi.urdf.xacro" />
+
+  <!-- Spawn leader -->
+  <node pkg="gazebo_ros"
+        type="spawn_model"
+        name="spawn_leader"
+        output="screen"
+        launch-prefix="bash -c 'sleep 3; $0 $@'"
+        args="-urdf
+              -model leader
+              -robot_namespace /leader
+              -x $(arg leader_x)
+              -y $(arg leader_y)
+              -z $(arg leader_z)
+              -Y $(arg leader_yaw)
+              -param robot_description" />
+
+  <!-- Spawn follower -->
+  <node pkg="gazebo_ros"
+        type="spawn_model"
+        name="spawn_follower"
+        output="screen"
+        launch-prefix="bash -c 'sleep 5; $0 $@'"
+        args="-urdf
+              -model follower
+              -robot_namespace /follower
+              -x $(arg follower_x)
+              -y $(arg follower_y)
+              -z $(arg follower_z)
+              -Y $(arg follower_yaw)
+              -param robot_description" />
+</launch>

@@ -1,0 +1,31 @@
+<launch>
+  <arg name="image_topic" default="/camera/rgb/image_raw" />
+  <arg name="template_dir" default="$(env HOME)/home_robot/datasets/object_templates" />
+  <arg name="template_min_score" default="0.55" />
+  <arg name="min_area" default="300" />
+  <arg name="debug_view" default="true" />
+  <arg name="enable_color_fallback" default="true" />
+
+  <node pkg="cleanbot_course_project"
+        type="object_recognition_node.py"
+        name="object_recognition_node"
+        output="screen">
+    <param name="image_topic" value="$(arg image_topic)" />
+    <param name="template_dir" value="$(arg template_dir)" />
+    <param name="template_min_score" value="$(arg template_min_score)" />
+    <param name="min_area" value="$(arg min_area)" />
+    <param name="debug_view" value="$(arg debug_view)" />
+    <param name="enable_color_fallback" value="$(arg enable_color_fallback)" />
+
+    <!-- Blue ball HSV fallback -->
+    <rosparam param="blue_hsv_lower">[92, 60, 35]</rosparam>
+    <rosparam param="blue_hsv_upper">[106, 255, 255]</rosparam>
+
+    <!-- Deep-blue chair HSV fallback -->
+    <rosparam param="chair_hsv_lower">[100, 80, 20]</rosparam>
+    <rosparam param="chair_hsv_upper">[130, 255, 170]</rosparam>
+
+    <!-- Multi-scale template matching -->
+    <rosparam param="template_scales">[0.60, 0.75, 0.90, 1.00, 1.15, 1.30]</rosparam>
+  </node>
+</launch>

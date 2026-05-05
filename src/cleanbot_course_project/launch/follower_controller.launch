@@ -1,0 +1,37 @@
+<launch>
+  <arg name="leader_model_name" default="leader" />
+  <arg name="follower_model_name" default="follower" />
+  <arg name="cmd_vel_topic" default="/follower/cmd_vel" />
+
+  <arg name="target_distance" default="0.8" />
+  <arg name="stop_distance" default="0.55" />
+
+  <arg name="max_linear_speed" default="0.22" />
+  <arg name="max_angular_speed" default="0.8" />
+
+  <arg name="linear_kp" default="0.45" />
+  <arg name="angular_kp" default="1.2" />
+
+  <node pkg="cleanbot_course_project"
+        type="follower_controller.py"
+        name="follower_controller"
+        output="screen">
+    <param name="leader_model_name" value="$(arg leader_model_name)" />
+    <param name="follower_model_name" value="$(arg follower_model_name)" />
+    <param name="cmd_vel_topic" value="$(arg cmd_vel_topic)" />
+
+    <param name="target_distance" value="$(arg target_distance)" />
+    <param name="stop_distance" value="$(arg stop_distance)" />
+
+    <param name="max_linear_speed" value="$(arg max_linear_speed)" />
+    <param name="max_angular_speed" value="$(arg max_angular_speed)" />
+
+    <param name="linear_kp" value="$(arg linear_kp)" />
+    <param name="angular_kp" value="$(arg angular_kp)" />
+
+    <param name="angle_deadband" value="0.08" />
+    <param name="distance_deadband" value="0.08" />
+    <param name="lost_timeout" value="1.0" />
+    <param name="control_rate" value="20.0" />
+  </node>
+</launch>

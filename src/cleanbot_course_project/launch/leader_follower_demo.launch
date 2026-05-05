@@ -1,0 +1,11 @@
+<launch>
+  <include file="$(find cleanbot_course_project)/launch/dual_waffle_pi_house.launch" />
+
+  <include file="$(find cleanbot_course_project)/launch/follower_controller.launch">
+    <arg name="leader_model_name" value="leader" />
+    <arg name="follower_model_name" value="follower" />
+    <arg name="cmd_vel_topic" value="/follower/cmd_vel" />
+    <arg name="target_distance" value="0.8" />
+    <arg name="stop_distance" value="0.55" />
+  </include>
+</launch>

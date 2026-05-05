@@ -24,6 +24,10 @@ catkin_package()
 catkin_install_python(PROGRAMS
   scripts/image_preprocess_node.py
   scripts/aruco_marker_detector.py
+  scripts/aruco_task_detector.py
+  scripts/aruco_task_state_machine.py
+  scripts/spawn_aruco_boards.py
+  scripts/generate_aruco_assets.py
   scripts/coverage_task_manager.py
   scripts/room_coverage_cleaner.py
   scripts/person_follow_node.py
@@ -32,7 +36,7 @@ catkin_install_python(PROGRAMS
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 
-install(DIRECTORY launch config worlds docs rviz urdf
+install(DIRECTORY launch config worlds docs rviz urdf models
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
   PATTERN ".git" EXCLUDE
   PATTERN "__pycache__" EXCLUDE

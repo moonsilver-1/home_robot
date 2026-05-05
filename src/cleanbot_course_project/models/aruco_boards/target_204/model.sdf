@@ -1,0 +1,29 @@
+<?xml version="1.0" ?>
+<sdf version="1.6">
+  <model name="cleanbot_aruco_target_204">
+    <static>true</static>
+    <link name="board_link">
+      <pose>0 0 0 0 0 0</pose>
+      <collision name="collision">
+        <geometry>
+          <box>
+            <size>0.35 0.35 0.02</size>
+          </box>
+        </geometry>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <box>
+            <size>0.35 0.35 0.02</size>
+          </box>
+        </geometry>
+        <material>
+          <script>
+            <uri>model://aruco_boards/target_204/materials/scripts</uri>
+            <name>CleanBot/Marker204</name>
+          </script>
+        </material>
+      </visual>
+    </link>
+  </model>
+</sdf>
