@@ -18,7 +18,7 @@
 3. 键盘操控
 
 ```
-   roslaunch cleanbot_course_project leader_teleop.launch
+rosrun turtlebot3_teleop turtlebot3_teleop_key
 ```
 
 ## 双车跟随

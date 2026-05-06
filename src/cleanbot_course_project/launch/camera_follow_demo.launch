@@ -24,8 +24,8 @@
   <arg name="control_rate" default="15.0" />
 
   <include file="$(find cleanbot_course_project)/launch/dual_waffle_pi_house.launch">
-    <arg name="leader_body_color" value="red" />
-    <arg name="follower_body_color" value="dark" />
+    <arg name="leader_body_color" value="green" />
+    <arg name="follower_body_color" value="red" />
   </include>
 
   <include file="$(find cleanbot_course_project)/launch/leader_teleop.launch">
@@ -41,6 +41,10 @@
     <param name="template_dir" value="$(arg template_dir)" />
     <param name="target_class" value="$(arg target_class)" />
     <param name="debug_view" value="$(arg debug_view)" />
+    <rosparam param="green_hsv_lower_1">[35, 60, 35]</rosparam>
+    <rosparam param="green_hsv_upper_1">[85, 255, 255]</rosparam>
+    <rosparam param="green_hsv_lower_2">[35, 60, 35]</rosparam>
+    <rosparam param="green_hsv_upper_2">[85, 255, 255]</rosparam>
     <param name="min_score" value="$(arg min_score)" />
     <param name="ratio_test" value="$(arg ratio_test)" />
     <param name="min_good_matches" value="$(arg min_good_matches)" />

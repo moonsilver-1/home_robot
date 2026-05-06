@@ -51,10 +51,10 @@ class CameraFollowNode:
         self.lost_timeout = float(rospy.get_param("~lost_timeout", 0.9))
         self.control_rate = float(rospy.get_param("~control_rate", 15.0))
         self.min_area = int(rospy.get_param("~min_area", 450))
-        self.red_hsv_lower_1 = np.array(rospy.get_param("~red_hsv_lower_1", [0, 120, 70]), dtype=np.uint8)
-        self.red_hsv_upper_1 = np.array(rospy.get_param("~red_hsv_upper_1", [10, 255, 255]), dtype=np.uint8)
-        self.red_hsv_lower_2 = np.array(rospy.get_param("~red_hsv_lower_2", [170, 120, 70]), dtype=np.uint8)
-        self.red_hsv_upper_2 = np.array(rospy.get_param("~red_hsv_upper_2", [180, 255, 255]), dtype=np.uint8)
+        self.green_hsv_lower_1 = np.array(rospy.get_param("~green_hsv_lower_1", [35, 60, 35]), dtype=np.uint8)
+        self.green_hsv_upper_1 = np.array(rospy.get_param("~green_hsv_upper_1", [85, 255, 255]), dtype=np.uint8)
+        self.green_hsv_lower_2 = np.array(rospy.get_param("~green_hsv_lower_2", [35, 60, 35]), dtype=np.uint8)
+        self.green_hsv_upper_2 = np.array(rospy.get_param("~green_hsv_upper_2", [85, 255, 255]), dtype=np.uint8)
 
         self.bridge = CvBridge()
         self.orb = cv2.ORB_create(nfeatures=int(rospy.get_param("~orb_features", 1400)))
@@ -272,13 +272,13 @@ class CameraFollowNode:
 
         return detections
 
-    def detect_red_target_by_color(self, frame):
+    def detect_green_target_by_color(self, frame):
         if not self.enable_color_tracking:
             return []
 
         hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
-        mask1 = cv2.inRange(hsv, self.red_hsv_lower_1, self.red_hsv_upper_1)
-        mask2 = cv2.inRange(hsv, self.red_hsv_lower_2, self.red_hsv_upper_2)
+        mask1 = cv2.inRange(hsv, self.green_hsv_lower_1, self.green_hsv_upper_1)
+        mask2 = cv2.inRange(hsv, self.green_hsv_lower_2, self.green_hsv_upper_2)
         mask = cv2.bitwise_or(mask1, mask2)
 
         mask = cv2.medianBlur(mask, 5)
@@ -309,7 +309,7 @@ class CameraFollowNode:
                         "bbox": [int(x), int(y), int(w), int(h)],
                         "score": float(confidence),
                         "confidence": float(confidence),
-                        "method": "red_color_mask",
+                        "method": "green_color_mask",
                     }
                 )
 
@@ -408,7 +408,7 @@ class CameraFollowNode:
             rospy.logerr_throttle(2.0, "Image conversion failed: %s", exc)
             return
 
-        detections = self.detect_red_target_by_color(frame)
+        detections = self.detect_green_target_by_color(frame)
         detection_source = "color"
         if not detections:
             detections = self.match_templates(frame)
