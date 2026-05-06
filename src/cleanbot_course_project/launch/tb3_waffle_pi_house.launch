@@ -1,6 +1,7 @@
 <launch>
   <!-- TurtleBot3 Waffle Pi model -->
   <arg name="model" default="$(optenv TURTLEBOT3_MODEL waffle_pi)" />
+  <arg name="gui" default="true" />
 
   <!-- Spawn pose -->
   <arg name="x_pos" default="-1.5" />
@@ -21,7 +22,7 @@
     <arg name="world_name" value="$(arg world_name)" />
     <arg name="paused" value="false" />
     <arg name="use_sim_time" value="true" />
-    <arg name="gui" value="true" />
+    <arg name="gui" value="$(arg gui)" />
     <arg name="headless" value="false" />
     <arg name="debug" value="false" />
     <arg name="verbose" value="true" />

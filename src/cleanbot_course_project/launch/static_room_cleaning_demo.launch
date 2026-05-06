@@ -1,0 +1,59 @@
+<launch>
+  <arg name="gui" default="true" />
+  <arg name="rviz" default="true" />
+  <arg name="map_file" default="$(find cleanbot_course_project)/map/map.yaml" />
+  <arg name="world_name" default="$(find aws_robomaker_small_house_world)/worlds/small_house.world" />
+
+  <!-- Keep these args for compatibility with existing wrappers. -->
+  <arg name="autostart_room" default="living_room" />
+  <arg name="autostart_delay" default="15.0" />
+
+  <!-- Robot spawn pose should match the saved map / room layout. -->
+  <arg name="x_pos" default="-1.5" />
+  <arg name="y_pos" default="0.0" />
+  <arg name="z_pos" default="0.08" />
+  <arg name="yaw" default="0.0" />
+
+  <env name="GAZEBO_MODEL_PATH"
+       value="$(find aws_robomaker_small_house_world)/models:$(optenv GAZEBO_MODEL_PATH)" />
+
+  <include file="$(find cleanbot_course_project)/launch/tb3_waffle_pi_house.launch">
+    <arg name="x_pos" value="$(arg x_pos)" />
+    <arg name="y_pos" value="$(arg y_pos)" />
+    <arg name="z_pos" value="$(arg z_pos)" />
+    <arg name="yaw" value="$(arg yaw)" />
+    <arg name="gui" value="$(arg gui)" />
+    <arg name="world_name" value="$(arg world_name)" />
+  </include>
+
+  <node pkg="map_server"
+        type="map_server"
+        name="map_server"
+        output="screen"
+        args="$(arg map_file)" />
+
+  <node pkg="amcl"
+        type="amcl"
+        name="amcl"
+        output="screen">
+    <rosparam file="$(find cleanbot_course_project)/config/amcl.yaml" command="load" />
+  </node>
+
+  <node pkg="move_base"
+        type="move_base"
+        name="move_base"
+        output="screen">
+    <rosparam file="$(find cleanbot_course_project)/config/costmap_common.yaml" command="load" ns="global_costmap" />
+    <rosparam file="$(find cleanbot_course_project)/config/costmap_common.yaml" command="load" ns="local_costmap" />
+    <rosparam file="$(find cleanbot_course_project)/config/global_costmap.yaml" command="load" />
+    <rosparam file="$(find cleanbot_course_project)/config/local_costmap.yaml" command="load" />
+    <rosparam file="$(find cleanbot_course_project)/config/move_base.yaml" command="load" />
+  </node>
+
+  <node if="$(arg rviz)"
+        pkg="rviz"
+        type="rviz"
+        name="rviz"
+        output="screen"
+        args="-d $(find cleanbot_course_project)/config/navigation.rviz" />
+</launch>
