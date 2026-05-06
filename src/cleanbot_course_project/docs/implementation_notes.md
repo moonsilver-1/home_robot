@@ -38,13 +38,9 @@ datasets/object_samples/leader/001.png
 datasets/object_samples/leader/002.png
 ```
 
-然后启动：
 
-```
-roslaunch cleanbot_course_project camera_follow_demo.launch
-```
+导航
+roslaunch cleanbot_course_project static_room_cleaning_demo.launch
 
-键盘控制leader小车
-```
-roslaunch cleanbot_course_project leader_teleop.launch
-```
+
+l是客厅，k是厨房，b是卧室

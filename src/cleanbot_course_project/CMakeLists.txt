@@ -28,6 +28,8 @@ catkin_install_python(PROGRAMS
   scripts/camera_follow_node.py
   scripts/object_recognition_node.py
   scripts/opencv_template_detector_node.py
+  scripts/room_navigation_node.py
+  scripts/room_navigation_console.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 

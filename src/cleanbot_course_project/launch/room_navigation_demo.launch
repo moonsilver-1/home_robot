@@ -1,0 +1,34 @@
+<launch>
+  <arg name="gui" default="true" />
+  <arg name="rviz" default="true" />
+  <arg name="command_topic" default="/cleanbot/room_navigation/command" />
+  <arg name="goal_timeout" default="90.0" />
+  <arg name="retry_count" default="1" />
+  <arg name="x_pos" default="-1.5" />
+  <arg name="y_pos" default="0.0" />
+  <arg name="z_pos" default="0.08" />
+  <arg name="yaw" default="0.0" />
+
+  <include file="$(find cleanbot_course_project)/launch/static_room_cleaning_demo.launch">
+    <arg name="gui" value="$(arg gui)" />
+    <arg name="rviz" value="$(arg rviz)" />
+    <arg name="x_pos" value="$(arg x_pos)" />
+    <arg name="y_pos" value="$(arg y_pos)" />
+    <arg name="z_pos" value="$(arg z_pos)" />
+    <arg name="yaw" value="$(arg yaw)" />
+  </include>
+
+  <node pkg="cleanbot_course_project"
+        type="room_navigation_node.py"
+        name="room_navigation_node"
+        output="screen">
+    <param name="command_topic" value="$(arg command_topic)" />
+    <param name="goal_timeout" value="$(arg goal_timeout)" />
+    <param name="retry_count" value="$(arg retry_count)" />
+    <param name="start_x" value="$(arg x_pos)" />
+    <param name="start_y" value="$(arg y_pos)" />
+    <param name="start_yaw" value="$(arg yaw)" />
+    <param name="rooms_config" value="$(find cleanbot_course_project)/config/rooms.yaml" />
+    <param name="scan_goals_config" value="$(find cleanbot_course_project)/config/scan_goals.yaml" />
+  </node>
+</launch>
