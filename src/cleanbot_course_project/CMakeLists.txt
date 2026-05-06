@@ -23,20 +23,15 @@ catkin_package()
 
 catkin_install_python(PROGRAMS
   scripts/image_preprocess_node.py
-  scripts/aruco_marker_detector.py
-  scripts/aruco_task_detector.py
-  scripts/aruco_task_state_machine.py
-  scripts/spawn_aruco_boards.py
-  scripts/generate_aruco_assets.py
-  scripts/coverage_task_manager.py
-  scripts/room_coverage_cleaner.py
-  scripts/person_follow_node.py
-  scripts/target_3d_locator.py
-  scripts/arm_preset_action_node.py
+  scripts/image_sample_collector.py
+  scripts/follower_controller.py
+  scripts/camera_follow_node.py
+  scripts/object_recognition_node.py
+  scripts/opencv_template_detector_node.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 
-install(DIRECTORY launch config worlds docs rviz urdf models
+install(DIRECTORY launch config worlds docs urdf models
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
   PATTERN ".git" EXCLUDE
   PATTERN "__pycache__" EXCLUDE

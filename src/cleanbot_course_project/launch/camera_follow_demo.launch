@@ -1,0 +1,61 @@
+<launch>
+  <arg name="image_topic" default="/follower/camera/rgb/image_raw" />
+  <arg name="cmd_vel_topic" default="/follower/cmd_vel" />
+  <arg name="template_dir" default="$(env HOME)/home_robot/datasets/object_samples/leader" />
+  <arg name="target_class" default="leader" />
+  <arg name="debug_view" default="true" />
+
+  <arg name="min_score" default="0.45" />
+  <arg name="ratio_test" default="0.75" />
+  <arg name="min_good_matches" default="12" />
+  <arg name="min_inliers" default="8" />
+  <arg name="min_inlier_ratio" default="0.55" />
+  <arg name="max_reproj_error" default="6.0" />
+
+  <arg name="center_deadband" default="0.08" />
+  <arg name="area_deadband" default="0.015" />
+  <arg name="target_area_ratio" default="0.055" />
+  <arg name="center_kp" default="1.20" />
+  <arg name="distance_kp" default="3.20" />
+  <arg name="max_linear_speed" default="0.18" />
+  <arg name="max_angular_speed" default="1.00" />
+  <arg name="search_angular_speed" default="0.35" />
+  <arg name="lost_timeout" default="0.9" />
+  <arg name="control_rate" default="15.0" />
+
+  <include file="$(find cleanbot_course_project)/launch/dual_waffle_pi_house.launch">
+    <arg name="leader_body_color" value="red" />
+    <arg name="follower_body_color" value="dark" />
+  </include>
+
+  <include file="$(find cleanbot_course_project)/launch/leader_teleop.launch">
+    <arg name="cmd_vel_topic" value="/leader/cmd_vel" />
+  </include>
+
+  <node pkg="cleanbot_course_project"
+        type="camera_follow_node.py"
+        name="camera_follow_node"
+        output="screen">
+    <param name="image_topic" value="$(arg image_topic)" />
+    <param name="cmd_vel_topic" value="$(arg cmd_vel_topic)" />
+    <param name="template_dir" value="$(arg template_dir)" />
+    <param name="target_class" value="$(arg target_class)" />
+    <param name="debug_view" value="$(arg debug_view)" />
+    <param name="min_score" value="$(arg min_score)" />
+    <param name="ratio_test" value="$(arg ratio_test)" />
+    <param name="min_good_matches" value="$(arg min_good_matches)" />
+    <param name="min_inliers" value="$(arg min_inliers)" />
+    <param name="min_inlier_ratio" value="$(arg min_inlier_ratio)" />
+    <param name="max_reproj_error" value="$(arg max_reproj_error)" />
+    <param name="center_deadband" value="$(arg center_deadband)" />
+    <param name="area_deadband" value="$(arg area_deadband)" />
+    <param name="target_area_ratio" value="$(arg target_area_ratio)" />
+    <param name="center_kp" value="$(arg center_kp)" />
+    <param name="distance_kp" value="$(arg distance_kp)" />
+    <param name="max_linear_speed" value="$(arg max_linear_speed)" />
+    <param name="max_angular_speed" value="$(arg max_angular_speed)" />
+    <param name="search_angular_speed" value="$(arg search_angular_speed)" />
+    <param name="lost_timeout" value="$(arg lost_timeout)" />
+    <param name="control_rate" value="$(arg control_rate)" />
+  </node>
+</launch>

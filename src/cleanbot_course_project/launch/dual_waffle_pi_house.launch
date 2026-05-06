@@ -13,6 +13,8 @@
   <arg name="follower_y" default="0.5" />
   <arg name="follower_z" default="0.08" />
   <arg name="follower_yaw" default="0.0" />
+  <arg name="leader_body_color" default="red" />
+  <arg name="follower_body_color" default="dark" />
 
   <!-- Make sure Gazebo can find AWS house models -->
   <env name="GAZEBO_MODEL_PATH"
@@ -30,8 +32,11 @@
   </include>
 
   <!-- Load Waffle Pi URDF -->
-  <param name="robot_description"
-         command="$(find xacro)/xacro --inorder $(find cleanbot_course_project)/urdf/cleanbot_waffle_pi.urdf.xacro" />
+  <param name="robot_description_leader"
+         command="$(find xacro)/xacro --inorder $(find cleanbot_course_project)/urdf/cleanbot_waffle_pi.urdf.xacro body_color:=$(arg leader_body_color)" />
+
+  <param name="robot_description_follower"
+         command="$(find xacro)/xacro --inorder $(find cleanbot_course_project)/urdf/cleanbot_waffle_pi.urdf.xacro body_color:=$(arg follower_body_color)" />
 
   <!-- Spawn leader -->
   <node pkg="gazebo_ros"
@@ -46,7 +51,7 @@
               -y $(arg leader_y)
               -z $(arg leader_z)
               -Y $(arg leader_yaw)
-              -param robot_description" />
+              -param robot_description_leader" />
 
   <!-- Spawn follower -->
   <node pkg="gazebo_ros"
@@ -61,5 +66,5 @@
               -y $(arg follower_y)
               -z $(arg follower_z)
               -Y $(arg follower_yaw)
-              -param robot_description" />
+              -param robot_description_follower" />
 </launch>
