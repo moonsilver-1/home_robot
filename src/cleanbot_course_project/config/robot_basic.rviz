@@ -1,0 +1,86 @@
+Panels:
+  - Class: rviz/Displays
+    Name: Displays
+  - Class: rviz/Views
+    Name: Views
+Visualization Manager:
+  Class: ""
+  Displays:
+    - Class: rviz/Grid
+      Name: Grid
+      Enabled: true
+      Value: true
+      Cell Size: 1
+      Color: 160; 160; 164
+      Line Style:
+        Line Width: 0.03
+        Value: Lines
+      Normal Cell Count: 0
+      Reference Frame: <Fixed Frame>
+      Plane: XY
+      Plane Cell Count: 50
+
+    - Class: rviz/TF
+      Name: TF
+      Enabled: true
+      Value: true
+      Show Arrows: false
+      Show Axes: true
+      Show Names: true
+      Frame Timeout: 15
+      Frames:
+        All Enabled: true
+      Marker Scale: 3
+      Update Interval: 0
+
+    - Class: rviz/LaserScan
+      Name: Laser Scan
+      Enabled: true
+      Value: true
+      Topic: /scan
+      Size: 0.05
+      Color: 255; 0; 0
+      Use Fixed Frame: true
+      Style: Points
+      Alpha: 1.0
+
+    - Class: rviz/Odometry
+      Name: Odometry
+      Enabled: true
+      Value: true
+      Topic: /odom
+      Length: 1.0
+      Keep: 200
+      Position Tolerance: 0.1
+      Angle Tolerance: 0.1
+      Color: 255; 100; 0
+      Alpha: 0.8
+
+  Global Options:
+    Background Color: 48; 48; 48
+    Fixed Frame: base_footprint
+    Frame Rate: 30
+  Name: root
+  Tools:
+    - Class: rviz/MoveCamera
+    - Class: rviz/SetGoal
+      Topic: /move_base_simple/goal
+  Value: true
+  Views:
+    Current:
+      Class: rviz/Orbit
+      Distance: 8
+      Focal Point:
+        X: 0
+        Y: 0
+        Z: 0
+      Name: Current View
+      Near Clip Distance: 0.01
+      Pitch: 1.05
+      Target Frame: <Fixed Frame>
+      Yaw: 0.78
+Window Geometry:
+  Width: 1200
+  Height: 900
+  X: 100
+  Y: 100

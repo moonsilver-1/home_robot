@@ -1,0 +1,37 @@
+<launch>
+  <arg name="gui" default="true" />
+  <arg name="rviz" default="true" />
+  <arg name="world_name" default="$(find aws_robomaker_small_house_world)/worlds/small_house.world" />
+
+  <arg name="x_pos" default="-1.5" />
+  <arg name="y_pos" default="0.0" />
+  <arg name="z_pos" default="0.08" />
+  <arg name="yaw" default="0.0" />
+
+  <env name="GAZEBO_MODEL_PATH"
+       value="$(find aws_robomaker_small_house_world)/models:$(optenv GAZEBO_MODEL_PATH)" />
+
+  <include file="$(find cleanbot_course_project)/launch/tb3_waffle_pi_house.launch">
+    <arg name="x_pos" value="$(arg x_pos)" />
+    <arg name="y_pos" value="$(arg y_pos)" />
+    <arg name="z_pos" value="$(arg z_pos)" />
+    <arg name="yaw" value="$(arg yaw)" />
+    <arg name="gui" value="$(arg gui)" />
+    <arg name="world_name" value="$(arg world_name)" />
+    <arg name="rviz" value="false" />
+  </include>
+
+  <node pkg="gmapping"
+        type="slam_gmapping"
+        name="slam_gmapping"
+        output="screen">
+    <rosparam file="$(find cleanbot_course_project)/config/gmapping.yaml" command="load" />
+  </node>
+
+  <node if="$(arg rviz)"
+        pkg="rviz"
+        type="rviz"
+        name="rviz"
+        output="screen"
+        args="-d $(find cleanbot_course_project)/config/navigation.rviz" />
+</launch>

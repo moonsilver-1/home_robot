@@ -2,6 +2,7 @@
   <!-- TurtleBot3 Waffle Pi model -->
   <arg name="model" default="$(optenv TURTLEBOT3_MODEL waffle_pi)" />
   <arg name="gui" default="true" />
+  <arg name="rviz" default="true" />
 
   <!-- Spawn pose -->
   <arg name="x_pos" default="-1.5" />
@@ -53,4 +54,11 @@
               -z $(arg z_pos)
               -Y $(arg yaw)
               -param robot_description" />
+
+  <node if="$(arg rviz)"
+        pkg="rviz"
+        type="rviz"
+        name="rviz"
+        output="screen"
+        args="-d $(find cleanbot_course_project)/config/robot_basic.rviz" />
 </launch>

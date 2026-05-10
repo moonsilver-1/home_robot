@@ -33,10 +33,10 @@
 
   <!-- Load Waffle Pi URDF -->
   <param name="robot_description_leader"
-         command="$(find xacro)/xacro --inorder $(find cleanbot_course_project)/urdf/cleanbot_waffle_pi.urdf.xacro body_color:=$(arg leader_body_color)" />
+         command="$(find xacro)/xacro --inorder $(find cleanbot_course_project)/urdf/cleanbot_waffle_pi.urdf.xacro body_color:=$(arg leader_body_color) enable_rgbd_camera:=true" />
 
   <param name="robot_description_follower"
-         command="$(find xacro)/xacro --inorder $(find cleanbot_course_project)/urdf/cleanbot_waffle_pi.urdf.xacro body_color:=$(arg follower_body_color)" />
+         command="$(find xacro)/xacro --inorder $(find cleanbot_course_project)/urdf/cleanbot_waffle_pi.urdf.xacro body_color:=$(arg follower_body_color) enable_rgbd_camera:=false" />
 
   <!-- Spawn leader -->
   <node pkg="gazebo_ros"

@@ -30,6 +30,7 @@ catkin_install_python(PROGRAMS
   scripts/opencv_template_detector_node.py
   scripts/room_navigation_node.py
   scripts/room_navigation_console.py
+  scripts/get_pointcloud.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 

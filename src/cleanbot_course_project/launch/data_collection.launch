@@ -1,6 +1,7 @@
 <launch>
   <!-- 根据实际 rostopic list 结果修改这个图像话题 -->
   <arg name="image_topic" default="/camera/rgb/image_raw" />
+  <arg name="rviz" default="true" />
 
   <!-- 样本保存目录 -->
   <arg name="output_dir" default="$(env HOME)/home_robot/datasets/target_samples" />
@@ -10,6 +11,7 @@
 
   <!-- 是否自动保存 -->
   <arg name="auto_save" default="false" />
+  <arg name="show_preview" default="true" />
 
   <!-- 自动保存间隔，单位秒 -->
   <arg name="save_interval" default="1.0" />
@@ -27,5 +29,18 @@
     <param name="auto_save" value="$(arg auto_save)" />
     <param name="save_interval" value="$(arg save_interval)" />
     <param name="resize_width" value="$(arg resize_width)" />
+    <param name="show_preview" value="$(arg show_preview)" />
   </node>
+
+  <include file="$(find cleanbot_course_project)/launch/theora_display.launch">
+    <arg name="camera_rgb_topic" value="$(arg image_topic)" />
+    <arg name="rviz" value="false" />
+  </include>
+
+  <node if="$(arg rviz)"
+        pkg="rviz"
+        type="rviz"
+        name="rviz"
+        output="screen"
+        args="-d $(find cleanbot_course_project)/config/vision_basic.rviz" />
 </launch>

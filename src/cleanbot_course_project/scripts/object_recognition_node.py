@@ -37,7 +37,7 @@ class ObjectRecognitionNode:
 
         self.template_min_score = float(rospy.get_param("~template_min_score", 0.55))
         self.min_area = int(rospy.get_param("~min_area", 300))
-        self.debug_view = bool(rospy.get_param("~debug_view", True))
+        self.debug_view = bool(rospy.get_param("~debug_view", False))
         self.enable_color_fallback = bool(rospy.get_param("~enable_color_fallback", True))
 
         self.template_scales = rospy.get_param(

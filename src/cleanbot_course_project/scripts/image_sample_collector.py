@@ -18,6 +18,7 @@ class ImageSampleCollector:
         self.save_interval = float(rospy.get_param("~save_interval", 1.0))
         self.resize_width = int(rospy.get_param("~resize_width", 0))
         self.max_samples = int(rospy.get_param("~max_samples", 0))
+        self.show_preview = bool(rospy.get_param("~show_preview", False))
 
         self.bridge = CvBridge()
         self.latest_frame = None
@@ -102,7 +103,7 @@ class ImageSampleCollector:
         rate = rospy.Rate(30)
 
         while not rospy.is_shutdown():
-            if self.latest_frame is not None:
+            if self.latest_frame is not None and self.show_preview:
                 frame_show = self.draw_overlay(self.latest_frame)
                 cv2.imshow("CleanBot Image Sample Collector", frame_show)
 
@@ -119,15 +120,20 @@ class ImageSampleCollector:
                     rospy.loginfo("Quit image sample collector.")
                     break
 
-                if self.auto_save:
-                    now = rospy.Time.now()
-                    if (now - self.last_save_time).to_sec() >= self.save_interval:
-                        self.save_frame()
-                        self.last_save_time = now
+            if self.auto_save:
+                now = rospy.Time.now()
+                if (now - self.last_save_time).to_sec() >= self.save_interval:
+                    self.save_frame()
+                    self.last_save_time = now
+
+            if not self.show_preview:
+                rate.sleep()
+                continue
 
             rate.sleep()
 
-        cv2.destroyAllWindows()
+        if self.show_preview:
+            cv2.destroyAllWindows()
 
 
 if __name__ == "__main__":

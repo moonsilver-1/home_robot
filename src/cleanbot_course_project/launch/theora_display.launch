@@ -1,0 +1,47 @@
+<launch>
+  <arg name="rviz" default="true" />
+  <!-- Base camera streams from Gazebo -->
+  <arg name="camera_rgb_topic" default="/camera/rgb/image_raw" />
+  <arg name="follower_rgb_topic" default="/follower/camera/rgb/image_raw" />
+
+  <!-- Vision outputs to be viewed through image_transport/theora -->
+  <arg name="object_annotated_topic" default="/cleanbot/vision/annotated_image" />
+  <arg name="follow_annotated_topic" default="/cleanbot/follow/annotated_image" />
+
+  <!-- Base topics for theora republished streams -->
+  <arg name="camera_rgb_out" default="/theora/camera/rgb/image_raw" />
+  <arg name="follower_rgb_out" default="/theora/follower/camera/rgb/image_raw" />
+  <arg name="object_annotated_out" default="/theora/cleanbot/vision/annotated_image" />
+  <arg name="follow_annotated_out" default="/theora/cleanbot/follow/annotated_image" />
+
+  <node pkg="image_transport"
+        type="republish"
+        name="republish_camera_rgb_theora"
+        output="screen"
+        args="raw in:=$(arg camera_rgb_topic) theora out:=$(arg camera_rgb_out)" />
+
+  <node pkg="image_transport"
+        type="republish"
+        name="republish_follower_rgb_theora"
+        output="screen"
+        args="raw in:=$(arg follower_rgb_topic) theora out:=$(arg follower_rgb_out)" />
+
+  <node pkg="image_transport"
+        type="republish"
+        name="republish_object_annotated_theora"
+        output="screen"
+        args="raw in:=$(arg object_annotated_topic) theora out:=$(arg object_annotated_out)" />
+
+  <node pkg="image_transport"
+        type="republish"
+        name="republish_follow_annotated_theora"
+        output="screen"
+        args="raw in:=$(arg follow_annotated_topic) theora out:=$(arg follow_annotated_out)" />
+
+  <node if="$(arg rviz)"
+        pkg="rviz"
+        type="rviz"
+        name="rviz"
+        output="screen"
+        args="-d $(find cleanbot_course_project)/config/vision_basic.rviz" />
+</launch>

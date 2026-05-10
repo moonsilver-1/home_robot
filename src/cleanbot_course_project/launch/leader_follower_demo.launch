@@ -1,3 +1,35 @@
 <launch>
-  <include file="$(find cleanbot_course_project)/launch/camera_follow_demo.launch" />
+  <arg name="leader_body_color" default="green" />
+  <arg name="follower_body_color" default="red" />
+  <arg name="leader_model_name" default="leader" />
+  <arg name="follower_model_name" default="follower" />
+  <arg name="cmd_vel_topic" default="/follower/cmd_vel" />
+
+  <arg name="target_distance" default="0.8" />
+  <arg name="stop_distance" default="0.55" />
+  <arg name="max_linear_speed" default="0.22" />
+  <arg name="max_angular_speed" default="0.8" />
+  <arg name="linear_kp" default="0.45" />
+  <arg name="angular_kp" default="1.2" />
+
+  <include file="$(find cleanbot_course_project)/launch/dual_waffle_pi_house.launch">
+    <arg name="leader_body_color" value="$(arg leader_body_color)" />
+    <arg name="follower_body_color" value="$(arg follower_body_color)" />
+  </include>
+
+  <include file="$(find cleanbot_course_project)/launch/leader_teleop.launch">
+    <arg name="cmd_vel_topic" value="/leader/cmd_vel" />
+  </include>
+
+  <include file="$(find cleanbot_course_project)/launch/follower_controller.launch">
+    <arg name="leader_model_name" value="$(arg leader_model_name)" />
+    <arg name="follower_model_name" value="$(arg follower_model_name)" />
+    <arg name="cmd_vel_topic" value="$(arg cmd_vel_topic)" />
+    <arg name="target_distance" value="$(arg target_distance)" />
+    <arg name="stop_distance" value="$(arg stop_distance)" />
+    <arg name="max_linear_speed" value="$(arg max_linear_speed)" />
+    <arg name="max_angular_speed" value="$(arg max_angular_speed)" />
+    <arg name="linear_kp" value="$(arg linear_kp)" />
+    <arg name="angular_kp" value="$(arg angular_kp)" />
+  </include>
 </launch>

@@ -25,7 +25,7 @@ class OpenCVTemplateDetector:
         self.min_inliers = int(rospy.get_param("~min_inliers", 8))
         self.min_inlier_ratio = float(rospy.get_param("~min_inlier_ratio", 0.55))
         self.max_reproj_error = float(rospy.get_param("~max_reproj_error", 6.0))
-        self.debug_view = bool(rospy.get_param("~debug_view", True))
+        self.debug_view = bool(rospy.get_param("~debug_view", False))
 
         self.bridge = CvBridge()
         self.orb = cv2.ORB_create(nfeatures=1200)

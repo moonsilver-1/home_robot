@@ -3,12 +3,8 @@ goal_timeout: 90.0
 retry_count: 1
 scan_goals:
   - {name: dock_start, x: 0.00, y: 0.00, yaw: 0.00}
-  - {name: living_room_entry, x: 1.00, y: 0.40, yaw: 0.00}
-  - {name: living_room_center, x: 2.10, y: 0.55, yaw: 0.00}
-  - {name: living_room_corner, x: 3.00, y: 1.25, yaw: 1.57}
-  - {name: kitchen_entry, x: 0.80, y: -0.95, yaw: 0.00}
-  - {name: kitchen_center, x: 1.80, y: -1.00, yaw: 3.14}
-  - {name: corridor_mid, x: 2.60, y: 0.05, yaw: 0.00}
-  - {name: bedroom_entry, x: 4.00, y: 0.80, yaw: 0.00}
-  - {name: bedroom_exit, x: 4.80, y: 0.80, yaw: 3.14}
+  - {name: living_room_entry, x: -1.134570598602295, y: 0.1273060142993927, yaw: 0.00}
+  - {name: kitchen_entry, x: 7.331874847412109, y: -0.7404894828796387, yaw: 0.00}
+  - {name: bedroom_entry, x: -7.386049747467041, y: 0.47574150562286377, yaw: 0.00}
+  - {name: study_entry, x: -9.2, y: -5.3, yaw: 0.00}
   - {name: dock_return, x: 0.00, y: 0.00, yaw: 3.14}

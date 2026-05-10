@@ -1,0 +1,26 @@
+<launch>
+  <arg name="gui" default="true" />
+  <arg name="world_name" default="$(find aws_robomaker_small_house_world)/worlds/small_house.world" />
+  <arg name="x_pos" default="-1.5" />
+  <arg name="y_pos" default="0.0" />
+  <arg name="z_pos" default="0.08" />
+  <arg name="yaw" default="0.0" />
+  <arg name="rviz" default="true" />
+
+  <include file="$(find cleanbot_course_project)/launch/get_pointcloud.launch">
+    <arg name="gui" value="$(arg gui)" />
+    <arg name="world_name" value="$(arg world_name)" />
+    <arg name="x_pos" value="$(arg x_pos)" />
+    <arg name="y_pos" value="$(arg y_pos)" />
+    <arg name="z_pos" value="$(arg z_pos)" />
+    <arg name="yaw" value="$(arg yaw)" />
+    <arg name="rviz" value="false" />
+  </include>
+
+  <node if="$(arg rviz)"
+        pkg="rviz"
+        type="rviz"
+        name="rviz"
+        output="screen"
+        args="-d $(find cleanbot_course_project)/config/pointcloud.rviz" />
+</launch>
